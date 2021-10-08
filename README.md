@@ -28,7 +28,7 @@ with `key.json`
 ```
 func main() {
 	aad := []byte("Hello world")
-  kh := getFromKMS("./key.json")
+	kh := getFromKMS("./key.json")
 
 	encode("file.tar", aad, kh)
 }
@@ -39,7 +39,7 @@ with `key.json`
 ```
 func main() {
 	aad := []byte("Hello world")
-  kh := getFromKMS("./key.json")
+	kh := getFromKMS("./key.json")
 
 	decode("file.tar", aad, kh)
 }
