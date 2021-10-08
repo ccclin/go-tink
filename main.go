@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -25,8 +26,8 @@ func main() {
 	// createKeyJson("./key2.json", kh)
 	// kh2 := getFromKMS("./key2.json")
 
-	encode(aad, kh)
-	decode(aad, kh)
+	encode("file.tar", aad, kh)
+	decode("file.tar", aad, kh)
 }
 
 func createKeyJson(path string, kh *keyset.Handle) {
@@ -70,31 +71,31 @@ func getFromKMS(path string) *keyset.Handle {
 	return kh
 }
 
-func encode(aad []byte, kh *keyset.Handle) {
+func encode(filePath string, aad []byte, kh *keyset.Handle) {
 	a, err := aead.New(kh)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fileBytes, _ := ioutil.ReadFile("./new.jpg")
+	fileBytes, _ := ioutil.ReadFile(filePath)
 	ct, err := a.Encrypt(fileBytes, aad)
 	if err != nil {
 		log.Fatal(err)
 	}
-	ioutil.WriteFile("./output", ct, 0644)
+	ioutil.WriteFile(fmt.Sprintf("%s.enc", filePath), ct, 0644)
 }
 
-func decode(aad []byte, kh *keyset.Handle) {
+func decode(filePath string, aad []byte, kh *keyset.Handle) {
 	a, err := aead.New(kh)
 	if err != nil {
 		log.Fatal(err)
 	}
-	newFileBytes, _ := ioutil.ReadFile("./output")
+	newFileBytes, _ := ioutil.ReadFile(fmt.Sprintf("%s.enc", filePath))
 
 	pt, err := a.Decrypt(newFileBytes, aad)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	ioutil.WriteFile("./new2.jpg", pt, 0644)
+	ioutil.WriteFile(filePath, pt, 0644)
 }
