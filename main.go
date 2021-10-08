@@ -23,8 +23,7 @@ func main() {
 	aad := []byte("Hello world")
 	kh, _ := keyset.NewHandle(aead.AES128GCMKeyTemplate())
 	// kh := getFromKMS("./key.json")
-	// createKeyJson("./key2.json", kh)
-	// kh2 := getFromKMS("./key2.json")
+	createKeyJson("./key.json", kh)
 
 	encode("file.tar", aad, kh)
 	decode("file.tar", aad, kh)
